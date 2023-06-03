@@ -11,6 +11,18 @@ conn = psycopg2.connect(database="hossein",
 
 cursor = conn.cursor()
 
+cursor.execute("select exists(select * from information_schema.tables where table_name=%s)", ('country',))
+
+if (not cursor.fetchone()[0]):
+
+    cursor.execute("CREATE TABLE country(\
+                id INTEGER PRIMARY KEY, \
+                name VARCHAR(55) NOT NULL,\
+                capital VARCHAR(55),\
+                currency VARCHAR(55)\
+                );\
+                ")
+    conn.commit()
 
 app = FastAPI()
 
